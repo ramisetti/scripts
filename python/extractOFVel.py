@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import itertools
 import pandas as pd
 
+#cols_to_keep = ['Points:1', 'pMean', 'UMean:0', 'UMean:1', 'UMean:2']
 cols_to_keep = ['Points:1', 'p', 'U:0', 'U:1', 'U:2']
 # open each file created using OFToCSV script
 # and extract velocity profile along y-direction
@@ -31,7 +32,7 @@ for filename in file_list:
 	step.append(time)
 
 	data=pd.read_csv(filename)
-	data['Points:1']/=1e-9
+	data['Points:1']/=3.4e-10
     #data['Points:1']+=9.0
 	group=data[cols_to_keep].groupby('Points:1',as_index = False).mean()
 	df_temp.loc[len(df_temp)] = [time, 'XXX', 'XXX', '','']
