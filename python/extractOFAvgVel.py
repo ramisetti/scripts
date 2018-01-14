@@ -35,8 +35,6 @@ for filename in file_list:
 	print ('calculating avgerage velocity at step %d between steps %d and %d \n' %(time,N*(time-1),N*time))
 	data_prev=pd.read_csv(previous_file)
 	data=pd.read_csv(filename)
-	# convert y coordinates to non-dimensional numbers 
-	data['Points:1']/=3.4e-10
 
 	# calculate the average velocity between two timesteps
 	# OF calculates stores the time averaged velocity in UMean
@@ -56,6 +54,13 @@ for filename in file_list:
 		data['pAvg']=(N*time*data['p']-N*(time-1)*data_prev['p'])/N
     
 	#data['Points:1']+=9.0
+	# convert y coordinates to non-dimensional numbers 
+	data['Points:1']/=3.4e-10
+	# convert velocity to non-dimensional numbers 
+	data['UAvgVel:0']*=(2.15e-12/3.4e-10)
+	data['UAvgVel:1']*=(2.15e-12/3.4e-10)
+	data['UAvgVel:2']*=(2.15e-12/3.4e-10)
+
 	group=data[cols_to_keep].groupby('Points:1',as_index = False).mean()
 	df_temp.loc[len(df_temp)] = [time, 'XXX', 'XXX', '','']
 	df_temp=df_temp.append(group)
@@ -71,7 +76,7 @@ df = df.reset_index(drop=True)
 if len(step)==0:
     sys.exit('Please run pvpython OFToCSV.py to generate cfd_vel* files first !!!')
 
-print ("writing data to CFDvel.xy!")
+print ("writing data to CFDAvgVel.xy!")
 # write single file with average velocity profiles for each timestep
-df.to_csv('CFDvel.xy', sep='\t', float_format='%g',header = None, index=False)
+df.to_csv('CFDAvgVel.xy', sep='\t', float_format='%g',header = None, index=False)
 sys.exit()

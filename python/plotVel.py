@@ -65,6 +65,26 @@ def main():
         elems,step = parseFile(lines,x_col_id,y_col_id)
         plotProfile(elems,step)
 
+#### function to plot density profile produced using lammps fix ave/chunk command
+def plotDens():
+    N=len(sys.argv)
+    if N < 2:
+        sys.exit("Syntax: python plotVel.py inputFile1 inputFile2 ... inputFileN")
+
+    for i in range(1,N):
+        inFileName = sys.argv[i]
+        inFile = open(inFileName, "r")
+        lines = inFile.readlines()
+        inFile.close()
+
+        if 'Coord1' in lines[2]:
+            x_col_id = lines[2].split().index('Coord1')-1
+        if 'density/mass' in lines[2]:
+            y_col_id = lines[2].split().index('density/mass')-1
+
+        elems,step = parseFile(lines,x_col_id,y_col_id)
+        plotProfile(elems,step)
+
 if __name__ == "__main__":
     main()
     plt.show()

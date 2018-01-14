@@ -34,6 +34,8 @@ for filename in file_list:
 	data=pd.read_csv(filename)
 	data['Points:1']/=3.4e-10
     #data['Points:1']+=9.0
+	data['U:0']*=(2.15e-12/3.4e-10)
+	data['U:1']*=(2.15e-12/3.4e-10)
 	group=data[cols_to_keep].groupby('Points:1',as_index = False).mean()
 	df_temp.loc[len(df_temp)] = [time, 'XXX', 'XXX', '','']
 	df_temp=df_temp.append(group)
@@ -45,7 +47,7 @@ df = df.reset_index(drop=True)
 if len(step)==0:
     sys.exit('Please run pvpython OFToCSV.py to generate cfd_vel* files first !!!')
 
-print ("writing data to CFDvel.xy!")
+print ("writing data to CFDVel.xy!")
 # write single file with velocity profiles for every timestep
-df.to_csv('CFDvel.xy', sep='\t', float_format='%g',header = None, index=False)
+df.to_csv('CFDVel.xy', sep='\t', float_format='%g',header = None, index=False)
 sys.exit()
