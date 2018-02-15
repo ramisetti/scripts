@@ -9,7 +9,10 @@ import sys,os,string
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
+from scipy.interpolate import griddata
+from scipy import optimize
 import itertools
+from circle_fitting import *
 
 #### parse file
 def parseFile(lines,x_col_id,y_col_id,z_col_id):
@@ -40,17 +43,50 @@ def plotProfile(elems,steps,step):
     x = a[:,0]
     y = a[:,1]
     z = a[:,2]
+
     shape = np.unique(x).shape[0],np.unique(y).shape[0]
     x_arr = x.reshape(shape)
     y_arr = y.reshape(shape)
     z_arr = z.reshape(shape)
-    # plt.pcolor(x_arr,y_arr,z_arr)
-    plt.contourf(x_arr,y_arr,z_arr,100,cmap=cm.hot)
-    #plt.imshow(z_arr, aspect='auto',origin='lower', extent=(x.min(), x.max(), y.max(), y.min()),
-	#    		   interpolation='nearest', cmap=cm.gist_rainbow)
+
+    xnew = np.linspace(np.min(x),np.max(x),shape[0]*5)
+    ynew = np.linspace(np.min(y),np.max(y),shape[1]*5)
+    X,Y = np.meshgrid(xnew,ynew)
+
+    plt.subplot(1,2,1)
+    plt.contourf(x_arr, y_arr, z_arr,cmap=cm.hot)
     plt.colorbar()
-    plt.show()
-		
+    plt.title('2D density map')
+
+    Z = griddata((x, y), z, (X, Y), method='linear')
+    plt.subplot(1,2,2)
+    plt.contourf(X, Y, Z,cmap=cm.hot)
+    plt.colorbar()
+    plt.title('2D density map with circular fitting')
+	
+    X=X[np.where((Z>=0.025) & (Z<=0.035))]
+    Y=Y[np.where((Z>=0.025) & (Z<=0.035))]
+    # X=X[np.where((Z>=0.4) & (Z<=0.5))]
+    # Y=Y[np.where((Z>=0.4) & (Z<=0.5))]
+
+    X=X[np.where((Y>=10) & (Y<=100))]
+    Y=Y[np.where((Y>=10) & (Y<=100))]
+    X=X[np.where((X>=30) & (X<=150))]
+    Y=Y[np.where((X>=30) & (X<=150))]
+
+    plt.plot(X,Y,'go')
+    XC,YC,R,std_R=circle_fitting_alg(X,Y)
+    XC1,YC1,R1,std_R1=circle_fitting_leastsq(X,Y)
+    print(XC,YC,R,std_R)
+    print(XC1,YC1,R1,std_R1)
+    theta_fit = np.linspace(-np.pi, np.pi, 180)
+    x_fit1 = XC1 + R1*np.cos(theta_fit)
+    y_fit1 = YC1 + R1*np.sin(theta_fit)
+
+    x_fit1=x_fit1[np.where(y_fit1>10)]
+    y_fit1=y_fit1[np.where(y_fit1>10)]
+    plt.plot(x_fit1, y_fit1, 'w-', lw=2)
+    plt.show()		
 
 #### main function
 def main():
@@ -73,7 +109,8 @@ def main():
     elems,steps = parseFile(lines,x_col_id,y_col_id,z_col_id)    
     for i in range(2,N):
 		plotProfile(elems,steps,int(sys.argv[i]))
-
+	
 if __name__ == "__main__":
     main()
     plt.show()
+
