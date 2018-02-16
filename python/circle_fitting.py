@@ -3,6 +3,7 @@
 #### This script contains different implementations to fit (x,y) coordinates to a circle and estimate center xc,yc and radius R values
 
 import numpy as np
+from scipy import optimize
 
 #### Reference: Samuel M Thomas, Y.T Chan, A simple approach for the estimation of circular arc center and its radius, Computer Vision, Graphics, and Image Processing, Volume 45, Issue 3, 1989, Pages 362-370, https://doi.org/10.1016/0734-189X(89)90088-1.
 # this function is similar to circle_fitting_alg
@@ -94,4 +95,4 @@ def circle_fitting_leastsq(x,y):
 	Ri_2 = calc_R(x,y,center_2)
 	R = Ri_2.mean()
 	std_R = Ri_2.std()
-	return xc,yc,R.std_R
+	return xc,yc,R,std_R

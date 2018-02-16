@@ -10,7 +10,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from scipy.interpolate import griddata
-from scipy import optimize
 import itertools
 from circle_fitting import *
 
@@ -53,39 +52,10 @@ def plotProfile(elems,steps,step):
     ynew = np.linspace(np.min(y),np.max(y),shape[1]*5)
     X,Y = np.meshgrid(xnew,ynew)
 
-    plt.subplot(1,2,1)
     plt.contourf(x_arr, y_arr, z_arr,cmap=cm.hot)
     plt.colorbar()
     plt.title('2D density map')
 
-    Z = griddata((x, y), z, (X, Y), method='linear')
-    plt.subplot(1,2,2)
-    plt.contourf(X, Y, Z,cmap=cm.hot)
-    plt.colorbar()
-    plt.title('2D density map with circular fitting')
-	
-    X=X[np.where((Z>=0.025) & (Z<=0.035))]
-    Y=Y[np.where((Z>=0.025) & (Z<=0.035))]
-    # X=X[np.where((Z>=0.4) & (Z<=0.5))]
-    # Y=Y[np.where((Z>=0.4) & (Z<=0.5))]
-
-    X=X[np.where((Y>=10) & (Y<=100))]
-    Y=Y[np.where((Y>=10) & (Y<=100))]
-    X=X[np.where((X>=30) & (X<=150))]
-    Y=Y[np.where((X>=30) & (X<=150))]
-
-    plt.plot(X,Y,'go')
-    XC,YC,R,std_R=circle_fitting_alg(X,Y)
-    XC1,YC1,R1,std_R1=circle_fitting_leastsq(X,Y)
-    print(XC,YC,R,std_R)
-    print(XC1,YC1,R1,std_R1)
-    theta_fit = np.linspace(-np.pi, np.pi, 180)
-    x_fit1 = XC1 + R1*np.cos(theta_fit)
-    y_fit1 = YC1 + R1*np.sin(theta_fit)
-
-    x_fit1=x_fit1[np.where(y_fit1>10)]
-    y_fit1=y_fit1[np.where(y_fit1>10)]
-    plt.plot(x_fit1, y_fit1, 'w-', lw=2)
     plt.show()		
 
 #### main function
