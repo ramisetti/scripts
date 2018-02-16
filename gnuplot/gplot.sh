@@ -1,3 +1,5 @@
+#!/usr/bin/bash
+
 ##### IMPORTANT NOTES ######
 # This script is a wrapper to plot data using gnuplot
 # This is in not a replacement to gnuplot but I use
