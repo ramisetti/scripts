@@ -2,7 +2,7 @@
 
 #### IMPORTANT NOTE: This script works only with python version 3 or greater
 #### This script plots 2D color maps for lammps 2D data
-#### USAGE: python plot2DMap.py inputFile1 timesteps
+#### USAGE: python plot2DMap.py inputFile1 timestep
 
 #### import packages
 import sys,os,string
@@ -17,7 +17,7 @@ from circle_fitting import *
 def parseFile(lines,x_col_id,y_col_id,z_col_id):
     elems = []
     step = []
-    # copy coordinates and velocity into array:
+    # copy X,Y coordinates and density values into array:
     for line in lines:
       if line[0] != '#': # ignore comments
         #words = string.split(line) # for python version < 3.0
@@ -76,7 +76,7 @@ def main():
     if 'density/mass' in lines[2]:
 		z_col_id = lines[2].split().index('density/mass')-1
 
-    elems,steps = parseFile(lines,x_col_id,y_col_id,z_col_id)    
+    elems,steps = parseFile(lines,x_col_id,y_col_id,z_col_id)
     for i in range(2,N):
 		plotProfile(elems,steps,int(sys.argv[i]))
 	

@@ -2,7 +2,7 @@
 
 #### IMPORTANT NOTE: This script works only with python version 3 or greater
 #### This script plots 2D color maps for lammps 2D data
-#### USAGE: python plot2DMapFit.py inputFile1 timesteps
+#### USAGE: python plot2DMapFit.py inputFile1 timestep
 
 #### import packages
 import sys,os,string
@@ -57,8 +57,6 @@ def plotProfile(elems,steps,step,dens,bbox):
     plt.colorbar()
     plt.title('2D density map with circular fitting')
 
-    # X=X[np.where((Z>=dens[0]) & (Z<=dens[1]))]
-    # Y=Y[np.where((Z>=dens[1]) & (Z<=dens[1]))]
     X=X[np.where((Z>=dens[0]) & (Z<=dens[1]))]
     Y=Y[np.where((Z>=dens[0]) & (Z<=dens[1]))]
 
