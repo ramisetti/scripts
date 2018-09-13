@@ -70,34 +70,45 @@ Tested with Python 2.7.5',formatter_class=RawTextHelpFormatter)
     steps2plot=[]
 
     for fileName in args.file:
-	inFile = open(fileName, "r")
-        lines = inFile.readlines()
-        inFile.close()
-	
-	if args.xfield in lines[2]:
-            x_col_id = lines[2].split().index(args.xfield)-1
-        if args.yfield in lines[2]:
-            y_col_id = lines[2].split().index(args.yfield)-1
+		if not os.path.exists(fileName):
+			sys.exit('Data file does not exist!')
+		inFile = open(fileName, "r")
+		
+		lines = inFile.readlines()
+		inFile.close()
 
-        elems,steps = parseFile(lines,x_col_id,y_col_id)
+		options=lines[2].split()
+		options.remove('#')
+		if args.xfield in options:
+			x_col_id = lines[2].split().index(args.xfield)-1
+		else:
+			print 'xfield value: {} does not exist as a field in the data file! The possible options are: {}'.format(args.xfield, options)
+			sys.exit()
+		
+		if args.yfield in options:
+			y_col_id = lines[2].split().index(args.yfield)-1
+		else:
+			print 'yfield value: {} does not exist as a field in the data file! The possible options are: {}'.format(args.yfield,options)
+			sys.exit()
+			
+		elems,steps = parseFile(lines,x_col_id,y_col_id)
 
-	if args.plotNprofiles is not None:
-	    N=int(len(steps)/(args.plotNprofiles))
-	    if N==0: 
-		print ('Not enough data! try reducing N')
-	    else:
-	        steps2plot=steps[0::N]
-	else:
-	    if args.timestep != 99999 and args.timestep is not None:
-	        steps2plot=args.timestep
-	    else:
-	        steps2plot=[steps[-1]]
+		if args.plotNprofiles is not None:
+			N=int(len(steps)/(args.plotNprofiles))
+			if N==0: 
+				print ('Not enough data! try reducing N')
+			else:
+				steps2plot=steps[0::N]
+		else:
+			if args.timestep != 99999 and args.timestep is not None:
+				steps2plot=args.timestep
+			else:
+				steps2plot=[steps[-1]]
 
 	#print (steps2plot)
-        plotProfile(elems,steps,steps2plot)
+    plotProfile(elems,steps,steps2plot); print 'Happy plotting!'
 
-    print 'Happy plotting!'
-  
+
 if __name__ == "__main__":
     main()
     plt.show()
