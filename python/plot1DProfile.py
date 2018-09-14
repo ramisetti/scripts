@@ -105,9 +105,10 @@ Tested with Python 2.7.5',formatter_class=RawTextHelpFormatter)
 			else:
 				steps2plot=[steps[-1]]
 
-	#print (steps2plot)
-    plotProfile(elems,steps,steps2plot); print 'Happy plotting!'
+		#print (steps2plot)
+		plotProfile(elems,steps,steps2plot)
 
+    print ('Happy plotting!')
 
 if __name__ == "__main__":
     main()
