@@ -1,5 +1,8 @@
+#!/usr/bin/env python
+
 #### IMPORTANT NOTE: This script works only with python version 3 or greater
 #### This script writes an output file and plots the velocity profiles
+#### This script is superseded by plot1DProfile script which has many options
 #### USAGE: python plotVel.py inputFile1 inputFile2 ... inputFileN
 
 #### import packages
