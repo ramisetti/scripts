@@ -100,6 +100,7 @@ done
 
 # invoke gnuplot to plot the data
 gnuplot -p <<- EOF
+#set terminal vttek
 set print "-"
 
 settings="${settings[*]}"
