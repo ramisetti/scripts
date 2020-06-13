@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 ##### IMPORTANT NOTES ######
 # This script is a wrapper to plot data using gnuplot
