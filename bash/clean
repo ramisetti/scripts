@@ -1,0 +1,8 @@
+#!/bin/bash
+#       usage:
+#       a. place in the bin
+#       b. cd into a directory that requires removal of temporary file
+#       c. run: clean
+#       d. note any temporary files inside nested directories will also be removed
+
+find . -name "*~" -exec rm {} \;
